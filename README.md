@@ -39,4 +39,4 @@ To learn more about developing your project with Sahha and Expo, look at the fol
 
 ---
 
-Copyright © 2022 Sahha. All rights reserved.
+Copyright © 2022 - 2024 Sahha. All rights reserved.
