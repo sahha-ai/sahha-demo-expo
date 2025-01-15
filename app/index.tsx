@@ -1,7 +1,14 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, TextInput, View, Button, SafeAreaView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Button,
+  SafeAreaView,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Sahha, {
   SahhaEnvironment,
   SahhaSensor,
@@ -9,7 +16,6 @@ import Sahha, {
 } from "sahha-react-native";
 
 export default function App() {
-
   const [appId, setAppId] = useState<string>(""); // This value is in your Sahha dashboard
   const [appSecret, setAppSecret] = useState<string>(""); // This value is in your Sahha dashboard
   const [userId, setUserId] = useState<string>(""); // This value you must create (UUID)
@@ -41,17 +47,17 @@ export default function App() {
 
   const loadData = async () => {
     try {
-      const _appId = await AsyncStorage.getItem('appId');
+      const _appId = await AsyncStorage.getItem("appId");
       if (_appId !== null) {
-        setAppId(_appId)
+        setAppId(_appId);
       }
-      const _appSecret = await AsyncStorage.getItem('appSecret');
+      const _appSecret = await AsyncStorage.getItem("appSecret");
       if (_appSecret !== null) {
-        setAppSecret(_appSecret)
+        setAppSecret(_appSecret);
       }
-      const _userId = await AsyncStorage.getItem('userId');
+      const _userId = await AsyncStorage.getItem("userId");
       if (_userId !== null) {
-        setUserId(_userId)
+        setUserId(_userId);
       }
     } catch (e) {
       // error reading value
@@ -60,9 +66,9 @@ export default function App() {
 
   const saveData = async () => {
     try {
-      await AsyncStorage.setItem('appId', appId);
-      await AsyncStorage.setItem('appSecret', appSecret);
-      await AsyncStorage.setItem('userId', userId);
+      await AsyncStorage.setItem("appId", appId);
+      await AsyncStorage.setItem("appSecret", appSecret);
+      await AsyncStorage.setItem("userId", userId);
     } catch (e) {
       // saving error
     }
@@ -71,20 +77,23 @@ export default function App() {
   const getAuthStatus = () => {
     console.log("Check Auth Status");
     Sahha.isAuthenticated((error: string, success: boolean) => {
-        if (error) {
-          console.error(`Error: ${error}`);
-        } else if (success != null) {
-          console.log(`Auth Status: ` + success);
-          setAuthStatus(success);
-        }
+      if (error) {
+        console.error(`Error: ${error}`);
+      } else if (success != null) {
+        console.log(`Auth Status: ` + success);
+        setAuthStatus(success);
       }
-    );
+    });
   };
 
   const authenticate = () => {
     console.log("Authenticate");
     saveData();
-    Sahha.authenticate(appId, appSecret, userId, (error: string, success: boolean) => {
+    Sahha.authenticate(
+      appId,
+      appSecret,
+      userId,
+      (error: string, success: boolean) => {
         if (error) {
           console.error(`Error: ${error}`);
         } else if (success != null) {
@@ -98,7 +107,7 @@ export default function App() {
   const getSensorStatus = () => {
     console.log("Sheck Sensor Status");
     Sahha.getSensorStatus(
-      [SahhaSensor.step_count, SahhaSensor.sleep, SahhaSensor.device_lock],
+      [SahhaSensor.steps, SahhaSensor.sleep, SahhaSensor.device_lock],
       (error: string, value: SahhaSensorStatus) => {
         if (error) {
           console.error(`Error: ${error}`);
@@ -117,7 +126,7 @@ export default function App() {
   const enableSensors = () => {
     console.log("Enable Sensors");
     Sahha.enableSensors(
-      [SahhaSensor.step_count, SahhaSensor.sleep, SahhaSensor.device_lock],
+      [SahhaSensor.steps, SahhaSensor.sleep, SahhaSensor.device_lock],
       (error: string, value: SahhaSensorStatus) => {
         if (error) {
           console.error(`Error: ${error}`);
@@ -136,32 +145,32 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.textSection}>
-      <Text>App Id:</Text>
-      <TextInput
+        <Text>App Id:</Text>
+        <TextInput
           editable
           numberOfLines={1}
           maxLength={64}
-          onChangeText={text => setAppId(text)}
+          onChangeText={(text) => setAppId(text)}
           value={appId}
           style={styles.textInput}
           returnKeyType="done"
         />
-      <Text>App Secret:</Text>
-      <TextInput
+        <Text>App Secret:</Text>
+        <TextInput
           editable
           numberOfLines={1}
           maxLength={64}
-          onChangeText={text => setAppSecret(text)}
+          onChangeText={(text) => setAppSecret(text)}
           value={appSecret}
           style={styles.textInput}
           returnKeyType="done"
         />
-              <Text>User Id:</Text>
-      <TextInput
+        <Text>User Id:</Text>
+        <TextInput
           editable
           numberOfLines={1}
           maxLength={64}
-          onChangeText={text => setUserId(text)}
+          onChangeText={(text) => setUserId(text)}
           value={userId}
           style={styles.textInput}
           returnKeyType="done"
@@ -170,19 +179,21 @@ export default function App() {
         <Button title="Authenticate" onPress={authenticate} />
       </View>
       <View style={styles.textSection}>
-      <Text style={styles.text}>SENSOR STATUS : {SahhaSensorStatus[sensorStatus]}</Text>
-      <Button title="Check Sensors" onPress={getSensorStatus} />
-      <Button
-        title="Enable Sensors"
-        disabled={isDisabled}
-        onPress={enableSensors}
-      />
-      <Button
-        title={"Open App Settings"}
-        onPress={() => {
-          Sahha.openAppSettings();
-        }}
-      />
+        <Text style={styles.text}>
+          SENSOR STATUS : {SahhaSensorStatus[sensorStatus]}
+        </Text>
+        <Button title="Check Sensors" onPress={getSensorStatus} />
+        <Button
+          title="Enable Sensors"
+          disabled={isDisabled}
+          onPress={enableSensors}
+        />
+        <Button
+          title={"Open App Settings"}
+          onPress={() => {
+            Sahha.openAppSettings();
+          }}
+        />
       </View>
       <StatusBar style="auto" />
     </View>
@@ -205,9 +216,9 @@ const styles = StyleSheet.create({
     borderColor: "#000",
     padding: 10,
     margin: 10,
-    width: 300
+    width: 300,
   },
   text: {
-    margin: 10
-  }
+    margin: 10,
+  },
 });
